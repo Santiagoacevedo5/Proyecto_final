@@ -413,7 +413,57 @@ footer {
     color: #991b1b;
     border: 1px solid #fca5a5;
 }
+/* Efecto Acordeón para el formulario de perfil */
+#editar-perfil-section {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
+    opacity: 0;
+    margin-bottom: 0;
+}
 
+#editar-perfil-section.show {
+    max-height: 1000px; /* Ajusta según el tamaño de tu formulario */
+    opacity: 1;
+    margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+/* Animación suave para el contenido */
+#editar-perfil-section .perfil-form-container,
+#editar-perfil-section .form-actions {
+    transform: translateY(-10px);
+    transition: transform 0.3s ease-out 0.1s;
+}
+
+#editar-perfil-section.show .perfil-form-container,
+#editar-perfil-section.show .form-actions {
+    transform: translateY(0);
+}
+#editar-perfil-section {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
+    opacity: 0;
+    margin-bottom: 0;
+}
+
+#editar-perfil-section.show {
+    max-height: 1000px; /* Ajusta según el tamaño de tu formulario */
+    opacity: 1;
+    margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+/* Animación suave para el contenido */
+#editar-perfil-section .perfil-form-container,
+#editar-perfil-section .form-actions {
+    transform: translateY(-10px);
+    transition: transform 0.3s ease-out 0.1s;
+}
+
+#editar-perfil-section.show .perfil-form-container,
+#editar-perfil-section.show .form-actions {
+    transform: translateY(0);
+}
 /* Responsive */
 @media (max-width: 768px) {
     header h1 {
