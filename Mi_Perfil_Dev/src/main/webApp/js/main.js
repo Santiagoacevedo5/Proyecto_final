@@ -184,6 +184,10 @@ async function manejarSubmitFormulario(event) {
             mostrarExito('¡Habilidad actualizada correctamente!');
         } else {
             // Modo creación: crear nueva habilidad
+            if (isNaN(experiencia) || experiencia < 0 || experiencia > 99) {
+                mostrarError('Por favor ingresa un número válido de años de experiencia (0-99).');
+                return;
+            }
             const resultado = await crearHabilidad(habilidad);
             mostrarExito('¡Habilidad creada correctamente!');
         }

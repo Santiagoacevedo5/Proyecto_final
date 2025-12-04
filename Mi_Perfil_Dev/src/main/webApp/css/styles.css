@@ -19,11 +19,14 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9fafb;
     color: var(--text-color);
-    line-height: 1.6;
+    line-height: 1.6;}
 }
-
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -630,6 +633,12 @@ footer {
         width: 0%;
     }
 }
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
