@@ -95,7 +95,6 @@ function mostrarPerfil(perfil) {
     html += `</div></div></div>`;
     perfilContent.innerHTML = html;
 }
-
 /**
  * Carga y muestra las habilidades
  */
@@ -182,18 +181,18 @@ async function manejarSubmitFormulario(event) {
             // Modo edición: actualizar habilidad existente
             habilidad.id = id;
             const resultado = await actualizarHabilidad(habilidad);
-            mostrarExito('Habilidad actualizada correctamente');
+            mostrarExito('¡Habilidad actualizada correctamente!');
         } else {
             // Modo creación: crear nueva habilidad
             const resultado = await crearHabilidad(habilidad);
-            mostrarExito('Habilidad creada correctamente');
+            mostrarExito('¡Habilidad creada correctamente!');
         }
         
         limpiarFormulario();
         await cargarHabilidades();
     } catch (error) {
         console.error('Error al guardar habilidad:', error);
-        mostrarError('Error al guardar la habilidad');
+        mostrarError('Error al guardar la habilidad. Por favor intenta de nuevo.');
     }
 }
 
@@ -427,5 +426,139 @@ async function manejarSubmitPerfil(event) {
     } catch (error) {
         console.error('Error al actualizar perfil:', error);
         mostrarError('Error al actualizar el perfil');
+    }
+}
+// Crear contenedor de notificaciones al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    if (!document.querySelector('.notification-container')) {
+        const container = document.createElement('div');
+        container.className = 'notification-container';
+        document.body.appendChild(container);
+    }
+});
+
+/**
+ * Muestra una notificación pop-up
+ * @param {string} mensaje - Mensaje a mostrar
+ * @param {string} tipo - Tipo de notificación: 'success', 'error', 'info'
+ * @param {number} duracion - Duración en milisegundos (default: 5000)
+ */
+function mostrarNotificacion(mensaje, tipo = 'info', duracion = 5000) {
+    const container = document.querySelector('.notification-container') || crearContenedorNotificaciones();
+    
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = `notification ${tipo}`;
+    
+    // Determinar el icono según el tipo
+    let icono = '';
+    switch(tipo) {
+        case 'success':
+            icono = '✓';
+            break;
+        case 'error':
+            icono = '✕';
+            break;
+        case 'info':
+            icono = 'i';
+            break;
+    }
+    
+    // Construir el HTML de la notificación
+    notification.innerHTML = `
+        <div class="notification-icon">${icono}</div>
+        <div class="notification-content">${mensaje}</div>
+        <button class="notification-close" onclick="cerrarNotificacion(this)">×</button>
+        <div class="notification-progress"></div>
+    `;
+    
+    // Agregar al contenedor
+    container.appendChild(notification);
+    
+    // Forzar reflow para activar la animación
+    notification.offsetHeight;
+    
+    // Activar animación de entrada
+    requestAnimationFrame(() => {
+        notification.classList.add('show');
+    });
+    
+    // Auto-cerrar después de la duración especificada
+    const timeout = setTimeout(() => {
+        cerrarNotificacion(notification);
+    }, duracion);
+    
+    // Guardar el timeout en el elemento para poder cancelarlo si es necesario
+    notification.dataset.timeout = timeout;
+    
+    return notification;
+}
+/**
+ * Cierra una notificación
+ * @param {HTMLElement|Event} elemento - Elemento de notificación o evento del botón
+ */
+function cerrarNotificacion(elemento) {
+    const notification = elemento instanceof HTMLElement && elemento.classList.contains('notification') 
+        ? elemento 
+        : elemento.parentElement;
+    
+    if (!notification) return;
+    
+    // Cancelar el timeout de auto-cierre si existe
+    if (notification.dataset.timeout) {
+        clearTimeout(parseInt(notification.dataset.timeout));
+    }
+    
+    // Activar animación de salida
+    notification.classList.remove('show');
+    notification.classList.add('hide');
+    
+    // Remover del DOM después de la animación
+    setTimeout(() => {
+        notification.remove();
+    }, 300);
+}
+
+/**
+ * Crea el contenedor de notificaciones si no existe
+ */
+function crearContenedorNotificaciones() {
+    const container = document.createElement('div');
+    container.className = 'notification-container';
+    document.body.appendChild(container);
+    return container;
+}
+
+/**
+ * Muestra mensaje de éxito
+ */
+function mostrarExito(mensaje, duracion = 5000) {
+    mostrarNotificacion(mensaje, 'success', duracion);
+}
+
+/**
+ * Muestra mensaje de error
+ */
+function mostrarError(mensaje, duracion = 5000) {
+    mostrarNotificacion(mensaje, 'error', duracion);
+}
+
+/**
+ * Muestra mensaje informativo
+ */
+function mostrarInfo(mensaje, duracion = 5000) {
+    mostrarNotificacion(mensaje, 'info', duracion);
+}
+
+/**
+ * Limpia todas las notificaciones activas
+ */
+function limpiarNotificaciones() {
+    const container = document.querySelector('.notification-container');
+    if (container) {
+        const notifications = container.querySelectorAll('.notification');
+        notifications.forEach(notification => {
+            cerrarNotificacion(notification);
+        });
     }
 }
