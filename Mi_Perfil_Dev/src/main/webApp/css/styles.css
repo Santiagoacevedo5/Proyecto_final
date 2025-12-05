@@ -21,9 +21,6 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--text-color);
     line-height: 1.6;
-    
-    /* 🎨 IMAGEN DE FONDO */
-    background-image: url('../images/fondo.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
